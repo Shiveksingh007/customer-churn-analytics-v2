@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Ruff lint
+        run: ruff check src tests app scripts
+
+      - name: Validate notebook .py sources compile
+        run: |
+          python - <<'PY'
+          import py_compile
+          from pathlib import Path
+          failed = []
+          for path in sorted(Path("notebooks").glob("*.py")):
+              try:
+                  py_compile.compile(str(path), doraise=True)
+              except py_compile.PyCompileError as exc:
+                  failed.append(f"{path}: {exc}")
+          if failed:
+              raise SystemExit("\n".join(failed))
+          print(f"Compiled {len(list(Path('notebooks').glob('*.py')))} notebook(s) OK")
+          PY
+
+      - name: Pytest
+        run: pytest tests/

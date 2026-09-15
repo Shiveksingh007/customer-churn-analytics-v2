@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Environments / secrets
+.venv/
+venv/
+env/
+.env
+*.env
+app/.env
+.streamlit/secrets.toml
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Jupyter / caches
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Local generated data / stores
+data/rag/chroma/
+data/genai_query_log/
+spark-warehouse/
+metastore_db/
+mlruns/
+reports/drift/*.html
+
+# Model artifacts that should be stored separately if large
+*.pkl
+*.model
+
+# Temporary files
+temp/
+tmp/
+dist/
+build/

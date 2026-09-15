@@ -1,0 +1,5 @@
+# Optional: Document RAG / AI Assistant dependencies
+chromadb>=0.5,<2
+sentence-transformers>=3,<6
+pypdf>=4,<7
+google-genai>=1,<2
